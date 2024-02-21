@@ -5,11 +5,13 @@
   tasks:
   
   - name: update repository index
+    tags: update, Kali
     apt:
       update_cache: yes
     when: ansible_distribution in ["Kali", "Ubuntu"] 
     
   - name: install apache2 and php package
+    tags: apache2, Kali
     apt:
       name: 
         - apache2
