@@ -1,0 +1,58 @@
+---
+## Playbook to get system time and append it to backup files
+
+- hosts: all
+
+  tasks:
+   - name: Get ansible date/time facts
+     setup:
+       filter: "ansible_date_time"
+       gather_subset: "!all"
+
+   - name: Store DTG as fact
+     set_fact:
+       DTG: "{{ ansible_date_time.date }}"
+
+   - name: Create Directory {{hostvars.localhost.DTG}}
+     file:
+      path: ./backups/{{hostvars.localhost.DTG}}
+      state: directory
+  run_once: true
+
+- hosts: ASR_Routers 
+
+  tasks:
+
+   - name: Backup  
+     cisco.ios.ios_command:
+       commands: show run  
+     register: config
+
+   - name: Save output to ~/Ansible-tuto/backups/
+     copy:
+       content: "{{config.stdout[0]}}"
+       dest: "./backups/{{hostvars.localhost.DTG}}/{{inventory_hostname}}-{{hostvars.localhost.DTG}}-config.txt"
+
+  tasks:
+   - name: Run the SHOW commands and save output 
+     ios_command:
+       commands: "{{ command_list }}"
+     register: showoutput
+
+   - name: "Put all the files together into one nice text file"
+     template: 
+       src: template.j2 
+       dest: "./backups/{{hostvars.localhost.DTG}}/{{ inventory_hostname }}-{{hostvars.localhost.DTG}}-showoutput.txt"
+
+- hosts: DELL SWITCHES
+
+  tasks:
+   - name: Backup DELL Switch 
+   
+     ios_config:
+       backup: yes
+       backup_options:
+         filename: "{{inventory_hostname}}-{{hostvars.localhost.DTG}}-config.txt"
+         dir_path: ./backups/{{hostvars.localhost.DTG}}
+
+

@@ -8,7 +8,7 @@
     tags: update, Kali
     apt:
       update_cache: yes
-    when: ansible_distribution in ["Kali", "Ubuntu"] 
+    when: ansible_distribution in ["Ubuntu"] 
     
   - name: install apache2 and php package
     tags: apache2, Kali
@@ -17,7 +17,14 @@
         - apache2
         - libapache2-mod-php
       state: latest
-    when: ansible_distribution in ["Kali", "Ubuntu"] 
+    when: ansible_distribution in ["Ubuntu"] 
+    
+  - name: start apache2
+    tags: apache, kali,apache2
+    service:
+      name: apache2
+      state: started	
+      enabled: yes
     
   - name: copy default html file for site
     tags: apache, apache2,httpd
@@ -27,4 +34,7 @@
       owner: root
       group: root
       mode: 0644
+      
+     
+      
 
