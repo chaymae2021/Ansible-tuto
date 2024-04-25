@@ -13,14 +13,16 @@
   - name: add ssh key for ansible_admin user
     tags: always
     authorized_key:
-      user: anssible_admin
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID9J/AZrLzbDqPZtQhF3AYGlReqyaM6Cosy3+j51TGZG ansible"
-      
+      user: anssible_admin key: "ssh-rsa 
+      AAAAB3NzaC1yc2EAAAADAQABAAABgQDhVs7OAew3J+OOpr+58CRLMVd87x5XUOsF42bI7R5Va+rf3T9fwWW"
+VGPZ+IQXMUJFYieCO5Y2g63gr8kFmhrTWxg3ZxUzCGNH11wM79sGe/BnExNDiReO9/BWTGUUyK44f0TZW80xRSoi+s5 
   - name: add sudoers file for ansible_admin
-    tags: always
-    copy:
-      src: sudoers_ansible_admin
-      dest: /etc/sudoers.d/ansible_admin 
-      owner: root
-      group: root
-      mode: 0440
+RBUFvfqI7SfkOtG0QLG4BEn3iSONIOO7FnQjpmBJJfds0ro9C5akT8sZiNmw47WcCG7j5VG93W5q79vtHIpnM5lT+o+ 
+    tags: always copy:
+YM/gcrsRam24hR1PqYsWTnIqIt10l1QhrpX39h21IqyPIurdHfRpjDu4Cu3E9Nq5zx4wt1uoc8t3y8qpAMlQqKDVOuy 
+      src: sudoers_ansible_admin dest: /etc/sudoers.d/ansible_admin 
+      owner: root group: root mode: 0440
+2pOtaf4wW406Uf4sMlDFEkoaZqOfsAo43FGgqw7MuO4WTjttfMCWbOjJGFmlGY7/eGhI0g8lk6kEWUxNn/zJQMVB+2O 
+vD5i4jvf02ON1+Kj5+dpZcCxgZJCMfyDkiVCHGmP8VI6FLAbDnSYeppAavmHrwQZMZMKkHMBY7Rm4O10EPWot88v3nY
+wPLsM= Ansible-key
+

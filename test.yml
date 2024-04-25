@@ -19,13 +19,48 @@
       path: /root/backups/{{ hostvars[inventory_hostname].DTG }}
       state: directory
   run_once: true
+
+- hosts: Cisco_Routers
+  gather_facts: false
+  tasks:
+   - name: Backup
+     cisco.ios.ios_command:
+       commands: show run
+     register: config
+
+   - name: "Save output to root/backups/"
+     copy:
+       content: "{{config.stdout[0]}}"
+       dest: "/root/backups/{{ hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{ hostvars[inventory_hostname].DTG }}-config.txt"
+
+- hosts: Dell_switches
+  gather_facts: false
+
+  collections:
+    - dellemc.os10
+  tasks:
+  
+   - name: Backup DELL Switch 
+     os10_config:
+       backup: yes
+       backup_options: 
+         dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
+         filename: "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
  
+
  
 - hosts: FortiGate
   gather_facts: false
   
   collections: 
     - fortinet.fortios
+  vars:
+    host: "194.168.4.5"
+    vdom: "root"
+    username: "admin"
+    password: "admin"
+    ssl_verify: "False"
+  
   tasks:
    - name: backup global
      fortios_system_config_backup_restore:

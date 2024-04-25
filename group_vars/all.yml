@@ -1,7 +1,7 @@
 ---
 #Default login details
 
-ansible_user = ""
-ansible_ssh_pass= ""
-ansible_network_os= "ios"
-ansible_conncection= "network_cli"
+#ansible_user = ""
+#ansible_ssh_pass= ""
+#ansible_network_os= "ios"
+#ansible_conncection= "network_cli"
