@@ -22,17 +22,23 @@
  
  
 - hosts: FortiGate
+  connection: httpapi
   gather_facts: false
   
   collections: 
     - fortinet.fortios
+  vars:
+    vdom: "root"
+    host: "194.168.4.5"
+    ansible_httpapi_use_ssl: no
+    ansible_httpapi_validate_certs: no
+    ansible_httpapi_port: 443
+
   tasks:
    - name: backup global
      fortios_system_config_backup_restore:
        config: "system config backup"
        host: "{{ host }}"
-       username: "{{ username }}"
-       password: "{{ password }}"
        vdom: "{{ vdom }}"
        backup: "yes"
        ssl_verify: False
