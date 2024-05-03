@@ -21,20 +21,23 @@
   run_once: true
 
 
---- - name: Run UCS Archive on F5 BIG-IPs hosts: F5All#- hosts: 
-  Cisco_Routers 
+- hosts: Cisco_Routers 
+  gather_facts: false
 
-  gather_facts: 
   tasks:
-   - name: Backup cisco.ios.ios_command:
- 
-      - name: "Save output to  root/backups/"  
+   - name: Backup cisco routers
+     cisco.ios.ios_command:
+       - name: "Save output to  root/backups/"  
       dest: "/root/backups/{{  hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{hostvars[inventory_hostname].DTG }}-config.txt" 
 
-- hosts: Dell_switches gather_facts: false tasks:
-collections: - dellemc.os10
+- hosts: Dell_switches 
+gather_facts: false 
+tasks:
+collections: 
+- dellemc.os10
   - name: Backup DELL Switch
-     os10_config: backup: yes 
+     os10_config: 
+     backup: yes 
      backup_options: 
      dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
       filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
