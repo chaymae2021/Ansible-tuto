@@ -27,20 +27,26 @@
   tasks:
    - name: Backup cisco routers
      cisco.ios.ios_command:
-       - name: "Save output to  root/backups/"  
-      dest: "/root/backups/{{  hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{hostvars[inventory_hostname].DTG }}-config.txt" 
+       commands: show run
+     register : config
+     
+   - name: "Save output to  root/backups/"  
+     copy:
+       content: "{{config.stdout[0]}}"
+       dest: "/root/backups/{{  hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{hostvars[inventory_hostname].DTG }}-config.txt" 
 
 - hosts: Dell_switches 
-gather_facts: false 
-tasks:
-collections: 
-- dellemc.os10
-  - name: Backup DELL Switch
-     os10_config: 
-     backup: yes 
-     backup_options: 
-     dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
-      filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
+  gather_facts: false 
+  
+  tasks:
+  collections: 
+    - dellemc.os10
+   - name: Backup DELL Switch
+      os10_config: 
+        backup: yes 
+        backup_options: 
+          dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
+          filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
       
     
    
