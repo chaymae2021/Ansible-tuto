@@ -22,40 +22,25 @@
 
 
 --- - name: Run UCS Archive on F5 BIG-IPs hosts: F5All#- hosts: 
-  Cisco_Routers connection: local# gather_facts: false gather_facts: 
-  False# tasks:
-#   - name: Backup cisco.ios.ios_command:
-  vars:# commands: show run f5Provider:# register: config server: "{{ 
-      mgmtAddr }}" server_port: 443# - name: "Save output to 
-      root/backups/" user: "{{ f5User }}"# copy: password: "{{ f5Pwd 
-      }}"# content: "{{config.stdout[0]}}"
-      validate_certs: no# dest: "/root/backups/{{ 
-      hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{ 
-      hostvars[inventory_hostname].DTG }}-config.txt" transport: rest
-- hosts: Dell_switches gather_facts: false tasks: collections: - name: 
-    Set archive name postfix data/time - dellemc.os10
-      local_action: command date +%Y%m%d-%H%M%Z tasks: run_once: true 
-      register: date - name: Backup DELL Switch
-     os10_config: backup: yes backup_options: - name: Create UCS archive 
-    dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
-      bigip_command: filename: 
-      "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
-        commands: - save sys ucs {{ inventory_hostname }}-{{ 
-          date['stdout'] }}
-        provider: "{{f5Provider}}" - hosts: FortiGate delegate_to: 
-      localhost gather_facts: false
-  
-  collections: - fortinet.fortios - name: Fetch UCS archive vars: host: 
-    "194.168.4.5" vdom: "root" username: "admin" password: "admin" 
-    ssl_verify: "False"
-      bigip_ucs_fetch: tasks: src: "{{ inventory_hostname }}-{{ 
-        date['stdout'] }}.ucs" - name: backup global dest: "tmp/{{ 
-        inventory_hostname }}-{{ date['stdout'] }}.ucs" 
-        fortios_system_config_backup_restore: provider: "{{f5Provider}}" 
-        config: "system config backup"
-      delegate_to: localhost host: "{{ host }}" username: "{{ username 
-       }}" password: "{{ password }}" vdom: "{{ vdom }}" backup: "yes" 
-       ssl_verify: False scope: "global or vdom" filename: 
-       "/root/backups/{{hostvars[inventory_hostname].DTG}}/{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
+  Cisco_Routers 
 
-     
+  gather_facts: 
+  tasks:
+   - name: Backup cisco.ios.ios_command:
+ 
+      - name: "Save output to  root/backups/"  
+      dest: "/root/backups/{{  hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{hostvars[inventory_hostname].DTG }}-config.txt" 
+
+- hosts: Dell_switches gather_facts: false tasks:
+collections: - dellemc.os10
+  - name: Backup DELL Switch
+     os10_config: backup: yes 
+     backup_options: 
+     dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
+      filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
+      
+    
+   
+  
+ 
+  
