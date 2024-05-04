@@ -25,6 +25,7 @@
   gather_facts: false
 
   tasks:
+
    - name: Backup cisco routers
      cisco.ios.ios_command:
        commands: show run
@@ -35,18 +36,18 @@
        content: "{{config.stdout[0]}}"
        dest: "/root/backups/{{  hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{hostvars[inventory_hostname].DTG }}-config.txt" 
 
+
 - hosts: Dell_switches 
+
   gather_facts: false 
   
   tasks:
-  collections: 
-    - dellemc.os10
    - name: Backup DELL Switch
-      os10_config: 
-        backup: yes 
-        backup_options: 
-          dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
-          filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
+     dellemc.os10.os10_config: 
+       backup: yes 
+       backup_options: 
+         dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
+         filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
       
     
    
