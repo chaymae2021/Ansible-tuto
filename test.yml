@@ -21,6 +21,39 @@
   run_once: true
 
 
+- hosts: F5_BIGIP
+  connection: local
+  gather_facts: no
+
+  vars:
+    f5Provider:
+      server: "{{ mgmtAddr }}"
+      server_port: 443
+      user: "{{ f5User }}"
+      password: "{{ f5Pwd }}"
+      validate_certs: no
+      transport: rest
+
+  tasks:
+    - name: Set archive name postfix data/time
+      local_action: command date +%Y%m%d-%H%M%Z
+      run_once: true
+      register: date
+
+    - name: Create UCS archive
+      bigip_command:
+        commands:
+          - save sys ucs {{ inventory_hostname }}-{{ date['stdout'] }}
+        provider: "{{f5Provider}}"
+      delegate_to: localhost
+
+    - name: Fetch UCS archive
+      bigip_ucs_fetch:
+        src: "{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
+        dest: "tmp/{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
+        provider: "{{f5Provider}}"
+      delegate_to: localhost
+
 - hosts: Cisco_Routers 
   gather_facts: false
 
