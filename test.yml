@@ -27,10 +27,10 @@
 
   vars:
     f5Provider:
-      server: "{{ mgmtAddr }}"
+      server: bigip1 
       server_port: 443
-      user: "{{ f5User }}"
-      password: "{{ f5Pwd }}"
+      user: admin 
+      password: <F5F5ok>
       validate_certs: no
       transport: rest
 
