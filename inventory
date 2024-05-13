@@ -1,6 +1,6 @@
 
 [F5_BIGIP]
-F5 ansible_host=194.168.4.5
+F5 ansible_host=192.168.1.245
 
 [Dell_switches]
 SP1 ansible_host=194.168.4.101

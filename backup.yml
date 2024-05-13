@@ -8,7 +8,7 @@
 
   vars:
     f5Provider:
-      server: bigip1 
+      server: 192.168.1.245 
       server_port: 443
       user: admin 
       password: <F5F5ok>
@@ -22,61 +22,62 @@
       register: date
 
     - name: Create UCS archive
-      bigip_command:
+      f5networks.f5_modules.bigip_command:
         commands:
           - save sys ucs {{ inventory_hostname }}-{{ date['stdout'] }}
         provider: "{{f5Provider}}"
       delegate_to: localhost
+      ignore_errors: yes
 
     - name: Fetch UCS archive
-      bigip_ucs_fetch:
+      f5networks.f5_modules.bigip_ucs_fetch:
         src: "{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
-        dest: "tmp/{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
+        dest: "/root/backup/{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
         provider: "{{f5Provider}}"
       delegate_to: localhost
+      ignore_errors: yes
 
+#- hosts: all
+#  gather_facts: no
 
-- hosts: all
-  gather_facts: no
-
-  tasks:
-   - name: Get ansible date/time facts
-     setup: 
-       filter: "ansible_date_time"
+#  tasks:
+#   - name: Get ansible date/time facts
+#     setup: 
+#       filter: "ansible_date_time"
        
-   - name: Store DTG as fact
-     set_fact:
-       DTG: "{{ ansible_date_time.date }}"
+#   - name: Store DTG as fact
+#     set_fact:
+#       DTG: "{{ ansible_date_time.date }}"
 
-   - name: Create Directory {{hostvars[inventory_hostname].DTG}}
-     file:
-      path: /root/backups/{{ hostvars[inventory_hostname].DTG }}
-      state: directory
-  run_once: true
+#   - name: Create Directory {{hostvars[inventory_hostname].DTG}}
+#     file:
+#      path: /root/backups/{{ hostvars[inventory_hostname].DTG }}
+#      state: directory
+#  run_once: true
  
  
-- hosts: FortiGate
-  connection: httpapi
-  gather_facts: false
+#- hosts: FortiGate
+#  connection: httpapi
+#  gather_facts: false
   
-  collections: 
-    - fortinet.fortios
-  vars:
-    vdom: "root"
-    host: "194.168.4.5"
-    ansible_httpapi_use_ssl: no
-    ansible_httpapi_validate_certs: no
-    ansible_httpapi_port: 443
+#  collections: 
+#    - fortinet.fortios
+#  vars:
+#    vdom: "root"
+#    host: "194.168.4.5"
+#    ansible_httpapi_use_ssl: no
+#    ansible_httpapi_validate_certs: no
+#    ansible_httpapi_port: 443
 
-  tasks:
-   - name: backup global
-     fortios_system_config_backup_restore:
-       config: "system config backup"
-       host: "{{ host }}"
-       vdom: "{{ vdom }}"
-       backup: "yes"
-       ssl_verify: False
-       scope: "global or vdom"
-       filename: "/root/backups/{{hostvars[inventory_hostname].DTG}}/{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
+#  tasks:
+#   - name: backup global
+#     fortios_system_config_backup_restore:
+#       config: "system config backup"
+#       host: "{{ host }}"
+#       vdom: "{{ vdom }}"
+#       backup: "yes"
+#       ssl_verify: False
+#       scope: "global or vdom"
+#       filename: "/root/backups/{{hostvars[inventory_hostname].DTG}}/{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
 
      
