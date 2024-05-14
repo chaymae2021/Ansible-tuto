@@ -1,4 +1,12 @@
 
+[Palo_Alto]
+PA ansible_host=192.168.1.2
+
+[Palo_Alto:vars]
+
+ansible_ssh_user=admin
+ansible_ssh_pass=<F%F%ok>
+
 [F5_BIGIP]
 F5 ansible_host=192.168.1.245
 
