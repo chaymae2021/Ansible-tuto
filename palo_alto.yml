@@ -8,20 +8,8 @@
 - name: Pull Configuration from Palo Alto Firewalls
   hosts: Palo_Alto
   gather_facts: no
-  tasks:
-   - name: Get ansible date/time facts
-     setup: 
-       filter: "ansible_date_time"
-       
-   - name: Store DTG as fact
-     set_fact:
-       DTG: "{{ ansible_date_time.date }}"
 
-   - name: Create Directory {{hostvars[inventory_hostname].DTG}}
-     file:
-      path: /root/backup/{{ hostvars[inventory_hostname].DTG }}
-      state: directory
-  run_once: true
+
   tasks:
     - name: Generate API Key
       connection: local
