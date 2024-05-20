@@ -1,3 +1,5 @@
+[SFTP_Server]
+SFTP ansible_host=192.168.1.5
 
 [Palo_Alto]
 PA ansible_host=192.168.1.2
