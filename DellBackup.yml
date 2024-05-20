@@ -15,7 +15,7 @@
 
    - name: Create Directory {{hostvars[inventory_hostname].DTG}}
      file:
-      path: /root/backups/{{ hostvars[inventory_hostname].DTG }}
+      path: /root/backups/Switches/{{ hostvars[inventory_hostname].DTG }}
       state: directory
   run_once: true
 
@@ -28,5 +28,25 @@
      dellemc.os10.os10_config: 
        backup: yes 
        backup_options: 
-         dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
+         dir_path: /root/backups/Switches/{{hostvars[inventory_hostname].DTG}}
          filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
+
+- hosts: SFTP_Server
+  gather_facts: false
+  
+  tasks:  
+  
+    - name: Copy directory to remote host
+      copy:
+        src: /root/backups/Switches/
+        dest: /root/backups/Dell_Switches_BD/
+        remote_src: yes
+
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: delete file
+      ansible.builtin.file:
+        path: /root/backups/Switches
+        state: absent
