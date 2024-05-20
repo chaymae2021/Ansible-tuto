@@ -19,7 +19,7 @@
       state: directory
   run_once: true
 
-- hosts: Cisco_Routers 
+- hosts: Cisco_Routers
   gather_facts: false
 
   tasks:
@@ -33,3 +33,10 @@
      copy:
        content: "{{config.stdout[0]}}"
        dest: "/root/backups/{{  hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{hostvars[inventory_hostname].DTG }}-config.txt" 
+
+  tasks:  
+    - name: Copy directory to remote host
+      copy:
+        src: /root//local/directory/
+        dest: /home/ubuntu/remote/directory/
+        remote_src: yes
