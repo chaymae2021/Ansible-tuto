@@ -15,7 +15,7 @@
 
    - name: Create Directory {{hostvars[inventory_hostname].DTG}}
      file:
-      path: /root/backups/{{ hostvars[inventory_hostname].DTG }}
+      path: /root/backups/Routers/{{ hostvars[inventory_hostname].DTG }}
       state: directory
   run_once: true
 
@@ -32,11 +32,24 @@
    - name: "Save output to  root/backups/"  
      copy:
        content: "{{config.stdout[0]}}"
-       dest: "/root/backups/{{  hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{hostvars[inventory_hostname].DTG }}-config.txt" 
+       dest: "/root/backups/Routers/{{  hostvars[inventory_hostname].DTG }}/{{ inventory_hostname }}-{{hostvars[inventory_hostname].DTG }}-config.txt" 
 
+- hosts: SFTP_Server
+  gather_facts: false
+  
   tasks:  
+  
     - name: Copy directory to remote host
       copy:
-        src: /root//local/directory/
-        dest: /home/ubuntu/remote/directory/
+        src: /root/backups/Routers/
+        dest: /root/backups/Cisco_Routers_BD/
         remote_src: yes
+
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: delete file
+      ansible.builtin.file:
+        path: /root/backups/Routers
+        state: absent
