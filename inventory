@@ -11,9 +11,9 @@ ansible_ssh_pass=<F%F%ok>
 F5 ansible_host=192.168.1.245
 
 [Dell_switches]
-SP1 ansible_host=194.168.4.101
-L1 ansible_host=194.168.4.1
-BL1 ansible_host=194.168.4.250  
+BD1-SW-SP01 ansible_host=194.168.4.101
+BD1-SW-L01 ansible_host=194.168.4.1
+BD1-SW-BL01 ansible_host=194.168.4.250  
 
 [Dell_switches:vars]
 
@@ -24,7 +24,7 @@ ansible_network_os=dellemc.os10.os10
 ansible_ssh_private_key_file=/root/.ssh/id_rsa
 
 [Cisco_Routers]
-ASR_R1 ansible_host=194.168.4.151
+BD1-SW-RT01 ansible_host=194.168.4.151
 
 [Cisco_Routers:vars]
 
