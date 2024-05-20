@@ -1,0 +1,42 @@
+
+---
+## Playbook to get system time and append it to backup files
+
+- hosts: F5_BIGIP
+  connection: local
+  gather_facts: no
+
+  vars:
+    f5Provider:
+      server: 192.168.1.245 
+      server_port: 443
+      user: admin 
+      password: <F5F5ok>
+      validate_certs: no
+      transport: rest
+
+  tasks:
+    - name: Set archive name postfix data/time
+      local_action: command date +%Y%m%d-%H%M%Z
+      run_once: true
+      register: date
+
+    - name: Create UCS archive
+      f5networks.f5_modules.bigip_command:
+        commands:
+          - save sys ucs {{ inventory_hostname }}-{{ date['stdout'] }}
+        provider: "{{f5Provider}}"
+      delegate_to: localhost
+      ignore_errors: yes
+
+    - name: Fetch UCS archive
+      f5networks.f5_modules.bigip_ucs_fetch:
+        src: "{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
+        dest: "/root/backup/{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
+        provider: "{{f5Provider}}"
+      delegate_to: localhost
+      ignore_errors: yes
+
+
+
+     
