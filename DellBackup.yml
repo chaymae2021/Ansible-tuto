@@ -18,3 +18,15 @@
       path: /root/backups/{{ hostvars[inventory_hostname].DTG }}
       state: directory
   run_once: true
+
+- hosts: Dell_switches 
+
+  gather_facts: false 
+  
+  tasks:
+   - name: Backup DELL Switch
+     dellemc.os10.os10_config: 
+       backup: yes 
+       backup_options: 
+         dir_path: /root/backups/{{hostvars[inventory_hostname].DTG}}
+         filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
