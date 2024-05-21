@@ -42,7 +42,7 @@
     - name: Copy directory to remote host
       copy:
         src: /root/backups/Routers/
-        dest: /root/backups/Cisco_Routers_BD/
+        dest: /var/sftp/Files/backups/Cisco_Routers_BD/
         remote_src: yes
 
 - hosts: localhost

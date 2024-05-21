@@ -1,5 +1,3 @@
-[SFTP_Server]
-SFTP ansible_host=192.168.1.5
 
 [Palo_Alto]
 PA ansible_host=192.168.1.2
@@ -13,8 +11,8 @@ ansible_ssh_pass=<F%F%ok>
 F5 ansible_host=192.168.1.245
 
 [Dell_switches]
-BD1-SW-SP01 ansible_host=194.168.4.101
-BD1-SW-L01 ansible_host=194.168.4.1
+BD1-SW-SP01 ansible_host=192.168.1.101
+BD1-SW-L01 ansible_host=192.168.1.14
 BD1-SW-BL01 ansible_host=194.168.4.250  
 
 [Dell_switches:vars]
@@ -42,3 +40,11 @@ FG ansible_host=194.168.4.5 ansible_user="admin" ansible_password="admin"
 
 ansible_network_os=fortinet.fortios.fortios
 
+[SFTP_Server]
+SFTP ansible_host=192.168.1.5
+
+[SFTP_Server:vars]
+
+ansible_ssh_user=chaymae
+ansible_ssh_password=rootroot
+ansible_connection=ssh

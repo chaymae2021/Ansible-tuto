@@ -1,7 +1,7 @@
 ---
 ## Playbook to get system time and append it to backup files
 
-- hosts: all
+- hosts: Dell_switches
   gather_facts: no
 
   tasks:
@@ -37,10 +37,10 @@
   tasks:  
   
     - name: Copy directory to remote host
-      copy:
-        src: /root/backups/Switches/
-        dest: /root/backups/Dell_Switches_BD/
-        remote_src: yes
+      ansible.builtin.copy:
+        src: /root/backups/Switches
+        dest: /var/sftp/backups/Dell_Switches_BD/
+        remote_src: false
 
 - hosts: localhost
   gather_facts: false
@@ -48,5 +48,5 @@
   tasks:
     - name: delete file
       ansible.builtin.file:
-        path: /root/backups/Switches
+        path: /root/backups/Switches/
         state: absent
