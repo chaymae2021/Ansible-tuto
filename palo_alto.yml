@@ -8,8 +8,6 @@
 - name: Pull Configuration from Palo Alto Firewalls
   hosts: Palo_Alto
   gather_facts: no
-
-
   tasks:
     - name: Generate API Key
       connection: local
