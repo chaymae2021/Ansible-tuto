@@ -3,7 +3,6 @@
 
 - hosts: all
   gather_facts: no
-
   tasks:
    - name: Get ansible date/time facts
      setup: 
@@ -21,9 +20,7 @@
 
 - hosts: Cisco_Routers
   gather_facts: false
-
   tasks:
-
    - name: Backup cisco routers
      cisco.ios.ios_command:
        commands: show run
