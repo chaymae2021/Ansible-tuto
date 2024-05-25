@@ -42,4 +42,24 @@
       check_mode: no
       copy:
         content: "{{configuration_string['content']  | regex_replace('<response.*<result>') | regex_replace('</result></response>')}}"
-        dest: '/root/backup/{{ hostvars[inventory_hostname].DTG }}/{{inventory_hostname}}.txt'
+        dest: '/root/backups/paloalto/{{ hostvars[inventory_hostname].DTG }}/{{inventory_hostname}}.txt'
+
+- hosts: SFTP_Server
+  gather_facts: false
+  
+  tasks:  
+  
+    - name: Copy directory to remote host
+      ansible.builtin.copy:
+        src: /root/backups/Switches
+        dest: /var/sftp/backups/Palo_Alto_BD/
+        remote_src: false
+
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: delete file
+      ansible.builtin.file:
+        path: /root/backups/paloalto/
+        state: absent
