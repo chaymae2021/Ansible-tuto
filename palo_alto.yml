@@ -51,7 +51,7 @@
   
     - name: Copy directory to remote host
       ansible.builtin.copy:
-        src: /root/backups/Switches
+        src: /root/backups/paloalto
         dest: /var/sftp/backups/Palo_Alto_BD/
         remote_src: false
 
