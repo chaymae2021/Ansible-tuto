@@ -1,8 +1,6 @@
 - name: Push Configuration , Load & Commit configuration to Palo Alto Networks equipements
   hosts: ALL
   gather_facts: no
-  pre_tasks:
-    - include_vars: vars.yml
 
   tasks: 
     - name: Checking ssh connectivity
