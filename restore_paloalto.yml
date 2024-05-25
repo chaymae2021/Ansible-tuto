@@ -10,6 +10,17 @@
         port: 22  
         timeout: 5
 
+    - name: Download configuration file from SFTP server
+      connection: local
+      ansible.builtin.fetch:
+        src: '{{ sftp_dir }}/{{ hostname }}.txt'
+        dest: '{{ configs_dir }}/{{ hostname }}.txt'
+        flat: yes
+        username: '{{ sftp_user }}'
+        password: '{{ sftp_pass }}'
+        host: '{{ sftp_server }}'
+        mode: '0644'
+        
     - name: Push  configurations on each devices from the {{ configs_dir }} directory
       connection: local
       panos_import:
