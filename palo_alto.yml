@@ -42,7 +42,7 @@
       check_mode: no
       copy:
         content: "{{configuration_string['content']  | regex_replace('<response.*<result>') | regex_replace('</result></response>')}}"
-        dest: '/root/backups/paloalto/{{ hostvars[inventory_hostname].DTG }}/{{inventory_hostname}}.txt'
+        dest: '/root/backups/paloalto/{{inventory_hostname}}.xml'
 
 - hosts: SFTP_Server
   gather_facts: false
@@ -61,5 +61,5 @@
   tasks:
     - name: delete file
       ansible.builtin.file:
-        path: /root/backups/paloalto/
+        path: /root/backups/paloalto/*
         state: absent

@@ -48,5 +48,5 @@
   tasks:
     - name: delete file
       ansible.builtin.file:
-        path: /root/backups/Switches/
+        path: /root/backups/Switches/*
         state: absent
