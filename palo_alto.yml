@@ -5,24 +5,6 @@
 # It will then  extract the running config from each devices and save them locally in ./config/
 ---
 
-- hosts: Palo_Alto
-  gather_facts: no
-
-  tasks:
-   - name: Get ansible date/time facts
-     setup: 
-       filter: "ansible_date_time"
-       
-   - name: Store DTG as fact
-     set_fact:
-       DTG: "{{ ansible_date_time.date }}"
-
-   - name: Create Directory {{hostvars[inventory_hostname].DTG}}
-     file:
-      path: /root/backups/paloalto/{{ hostvars[inventory_hostname].DTG }}
-      state: directory
-  run_once: true
-
 - name: Pull Configuration from Palo Alto Firewalls
   hosts: Palo_Alto
   gather_facts: no
