@@ -1,47 +1,47 @@
 - name: Push Configuration , Load & Commit configuration to Palo Alto Networks equipements
-  hosts: ALL
+  hosts: SFTP_Server
   gather_facts: no
 
   tasks: 
     - name: Checking ssh connectivity
       connection: local
       wait_for: 
-        host: '{{ ansible_host }}'
+        host: '192.168.1.2'
         port: 22  
         timeout: 5
 
     - name: Download configuration file from SFTP server
       connection: local
       ansible.builtin.fetch:
-        src: '{{ sftp_dir }}/{{ hostname }}.txt'
-        dest: '{{ configs_dir }}/{{ hostname }}.txt'
+        src: '/var/sftp/backups/Palo_Alto_BD/paloalto/PA.xml'
+        dest: '/root/backups/paloalto/PA.xml'
         flat: yes
-        username: '{{ sftp_user }}'
-        password: '{{ sftp_pass }}'
-        host: '{{ sftp_server }}'
-        mode: '0644'
+        username: '{{ ansible_ssh_user }}'
+        password: '{{ ansible_ssh_password }}'
+        host: '{{ ansible_host }}'
+        mode: '0666'
         
     - name: Push  configurations on each devices from the {{ configs_dir }} directory
       connection: local
-      panos_import:
+      paloaltonetworks.panos.panos_import:
         validate_certs: no
-        ip_address: '{{ ansible_host }}'
-        username: '{{ ansible_ssh_user }}'
-        password: '{{ ansible_ssh_pass }}'
-        file: '{{ configs_dir }}{{ hostname }}.txt'
+        ip_address: '192.168.1.2'
+        username: 'admin'
+        password: '<F%F%ok>'
+        file: '/root/backups/paloalto/PA.xml'
         category: "configuration"
 
     - name: Load configurations on each devices
       connection: local
-      panos_loadcfg:
-        ip_address: '{{ ansible_host }}'
-        username: '{{ ansible_ssh_user }}'
-        password: '{{ ansible_ssh_pass }}'
-        file: '{{ hostname }}.txt'
+      paloaltonetworks.panos.panos_loadcfg:
+        ip_address: '192.168.1.2'
+        username: 'admin'
+        password: '<F%F%ok>'
+        file: 'PA.xml'
 
     - name: Commit configuration on each devices
       connection: local
-      panos_commit:
-        ip_address: '{{ ansible_host }}'
-        username: '{{ ansible_ssh_user }}'
-        password: '{{ ansible_ssh_pass }}'
+      paloaltonetworks.panos.panos_commit:
+        ip_address: '192.168.1.2'
+        username: 'admin'
+        password: '<F%F%ok>'
