@@ -55,11 +55,11 @@
         dest: /var/sftp/backups/Palo_Alto_BD/
         remote_src: false
 
-- hosts: localhost
-  gather_facts: false
+#- hosts: localhost
+#  gather_facts: false
 
-  tasks:
-    - name: delete file
-      ansible.builtin.file:
-        path: /root/backups/paloalto/*
-        state: absent
+#  tasks:
+#    - name: delete file
+#      ansible.builtin.file:
+#        path: /root/backups/paloalto/*
+#        state: absent

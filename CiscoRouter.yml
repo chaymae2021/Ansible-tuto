@@ -1,7 +1,7 @@
 ---
 ## Playbook to get system time and append it to backup files
 
-- hosts: all
+- hosts: Cisco_Routers
   gather_facts: no
   tasks:
    - name: Get ansible date/time facts
@@ -37,10 +37,10 @@
   tasks:  
   
     - name: Copy directory to remote host
-      copy:
-        src: /root/backups/Routers/
-        dest: /var/sftp/Files/backups/Cisco_Routers_BD/
-        remote_src: yes
+      ansible.builtin.copy:
+        src: /root/backups/Routers
+        dest: /var/sftp/backups/Cisco_Routers_BD/
+        remote_src: false
 
 - hosts: localhost
   gather_facts: false
@@ -48,5 +48,5 @@
   tasks:
     - name: delete file
       ansible.builtin.file:
-        path: /root/backups/Routers
+        path: /root/backups/Routers/*
         state: absent
