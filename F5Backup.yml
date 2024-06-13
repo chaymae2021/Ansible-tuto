@@ -32,11 +32,29 @@
     - name: Fetch UCS archive
       f5networks.f5_modules.bigip_ucs_fetch:
         src: "{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
-        dest: "/root/backup/{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
+        dest: "/root/backup/F5BIGIP/{{ inventory_hostname }}-{{ date['stdout'] }}.ucs"
         provider: "{{f5Provider}}"
       delegate_to: localhost
       ignore_errors: yes
+- hosts: SFTP_Server
+  gather_facts: false
+  
+  tasks:  
+  
+    - name: Copy directory to remote host
+      ansible.builtin.copy:
+        src: /root/backups/F5BIGIP
+        dest: /var/sftp/backups/F5BIGIP_BD/
+        remote_src: false
 
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: delete file
+      ansible.builtin.file:
+        path: /root/backups/F5BIGIP/*
+        state: absent
 
 
      
