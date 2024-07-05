@@ -9,7 +9,8 @@
         cmd: ansible-galaxy collection install -r requirements.yml
       changed_when: false
 
-- hosts: Dell_switches
+- name: Backup configuration on Dell switches
+  hosts: Dell_switches
   gather_facts: no
 
   tasks:
