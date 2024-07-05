@@ -1,27 +1,26 @@
 
 [Palo_Alto]
-PA ansible_host=192.168.1.2
+PA ansible_host=192.168.5.1
 
 [Palo_Alto:vars]
 
-ansible_ssh_user=admin
-ansible_ssh_pass=<F%F%ok>
+ansible_ssh_user=aa_chaymae
+ansible_ssh_pass=/@|17x+wB@eA
+ansible_network_os=panos
 
 [F5_BIGIP]
 F5 ansible_host=192.168.1.245
 
 [Dell_switches]
-BD1-SW-SP01 ansible_host=192.168.1.101
-BD1-SW-L01 ansible_host=192.168.1.14
-BD1-SW-BL01 ansible_host=194.168.4.250  
+BL02 ansible_host=192.168.0.251
 
 [Dell_switches:vars]
 
-ansible_ssh_user=admin
-ansible_ssh_password=admin
+ansible_ssh_user=chaymae
+ansible_ssh_password=#Gna1@xU1M1F
 ansible_connection=network_cli
 ansible_network_os=dellemc.os10.os10
-ansible_ssh_private_key_file=/root/.ssh/id_rsa
+
 
 [Cisco_Routers]
 BD1-SW-RT01 ansible_host=194.168.4.151
@@ -34,11 +33,15 @@ ansible_connection=network_cli
 ansible_network_os=ios
 
 [FortiGate]
-FG ansible_host=194.168.4.5 ansible_user="admin" ansible_password="admin" 
+FG ansible_host=192.168.5.5 
+ 
 
 [FortiGate:vars]
-
+ANSIBLE_DEBUG=1
+ansible_ssh_user=aa_chaymae
+ansible_ssh_password=L:'"34mn#$$@11-983
 ansible_network_os=fortinet.fortios.fortios
+ansible_python_interpreter=/usr/bin/python3
 
 [SFTP_Server]
 SFTP ansible_host=192.168.1.5

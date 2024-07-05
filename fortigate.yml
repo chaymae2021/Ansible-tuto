@@ -1,0 +1,12 @@
+- hosts: FortiGate
+  connection: httpapi
+  collections:
+    - fortinet.fortios
+  
+  tasks:
+  - name: Backup current config
+    fortios_config:
+      host: 192.168.5.5
+      username: aa_chaymae
+      password: L:'"34mn#$$@11-983
+      backup: yes

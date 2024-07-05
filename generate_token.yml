@@ -1,0 +1,19 @@
+---
+
+- hosts: FortiGate
+  connection: httpapi
+  collections:
+    - fortinet.fortios
+  tasks:
+   - name: Generate The API token
+     fortios_monitor:
+        vdom: 'root'
+        selector: 'generate-key.system.api-user'
+        params:
+            api-user: 'chaymae'
+     register: tokeninfo
+
+   - name: Save the API token
+     copy:
+        content: "{{ tokeninfo.meta.results.access_token }}"
+        dest: './access_token.save'

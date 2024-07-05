@@ -1,0 +1,25 @@
+
+---
+
+- name: Pull Configuration from palo alto
+  hosts: Palo_Alto
+  gather_facts: no
+
+  tasks:
+    - name: Backup configuration from PAN Equipement
+      expect:
+        command: "scp {{ansible_ssh_user}}@{{ansible_host}}:/config/running-config.xml /tmp/running-config-{{inventory_hostname}}.xml"
+        responses: 
+          "password:": "{{ ansible_ssh_pass }}"
+      register: backup_result
+  
+    - name: Check if the backup was successful
+      ansible.builtin.stat:
+        path: /tmp/running-config-{{ inventory_hostname }}.xml
+      register: backup_file
+
+    - name: Move backup file to destination directory
+      ansible.builtin.copy:
+        src: /tmp/running-config-{{ inventory_hostname }}.xml 
+        dest: /root/backups/paloalto/{{ inventory_hostname }}.xml
+      when: backup_file.stat.exists

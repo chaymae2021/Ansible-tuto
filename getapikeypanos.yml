@@ -1,0 +1,77 @@
+- hosts: all
+
+  vars:
+
+    project: test-400
+    passwd_dict: "{{ dict(passwd_out.results|
+                          json_query('[].[item, ansible_facts.dummy]')) }}"
+
+  tasks:
+
+    - name: Test apikey is empty or missing
+      block:
+
+        - set_fact:
+            dummy:  "{{ lookup('community.general.passwordstore',
+                                entity,
+                                missing='empty') }}"
+          loop: "{{ ansible_play_hosts_all }}"
+          loop_control:
+            label: "{{ entity }}"
+          register: passwd_out
+          vars:
+            entity: "{{ project }}/{{ item }}/apikey"
+
+        - debug:
+            var: passwd_out
+          when: debug_classified|d(false)|bool
+
+        - debug:
+            var: passwd_dict
+          when: debug_classified|d(false)|bool
+
+      run_once: true
+
+    - name: Get and store apikey if empty or missing
+      block:
+     
+        - name: Get apikey
+          set_fact:
+            apikey: "{{ lookup('password', '/dev/null', seed=inventory_hostname) }}"
+
+        - debug:
+            var: apikey
+          when: debug_classified|d(false)|bool
+
+        - name: Store apikey
+          set_fact:
+            dummy: "{{ lookup('community.general.passwordstore',
+                               entity,
+                               create=true,
+                               userpass=apikey) }}"
+          vars:
+            entity: "{{ project }}/{{ inventory_hostname }}/apikey"
+
+      when: passwd_dict[inventory_hostname]|length == 0
+
+    - name: Limit scope of apikey(s) to task
+      block:
+        - set_fact:
+            dummy: ''
+            passwd_dict: {}
+        - debug:
+            msg: "Use {{ entity }}: {{ apikey }}"
+          vars:
+            entity: "{{ project }}/{{ inventory_hostname }}/apikey"
+            apikey: "{{ lookup('community.general.passwordstore', entity) }}"
+      when: scope|d('play') == 'task'
+
+    - name: No limit of apikey(s)
+      block:
+        - set_fact:
+            dummy: ''
+        - debug:
+            msg: "Use {{ entity }}: {{ passwd_dict[inventory_hostname] }}"
+          vars:
+            entity: "{{ project }}/{{ inventory_hostname }}/apikey"
+      when: scope|d('play') == 'play'

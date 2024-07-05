@@ -1,0 +1,17 @@
+---
+
+- name: Get Panorama config
+  collections:
+    - paloaltonetworks.panos
+  hosts: Palo_Alto
+  connection: local   
+  vars:
+    - provider:
+        ip_address: 192.168.5.1
+        username: "aa_chaymae"
+        password: "/@|17x+wB@eA"      
+  tasks:
+   - name: Get facts
+     panos_facts:
+       provider: '{{ provider }}'
+       gather_subset: ['config']

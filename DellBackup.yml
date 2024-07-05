@@ -19,17 +19,21 @@
       state: directory
   run_once: true
 
-- hosts: Dell_switches 
-
-  gather_facts: false 
-  
+- name: Backup Dell EMC OS10 configuration
+  hosts: Dell_switches
+  gather_facts: no
   tasks:
-   - name: Backup DELL Switch
-     dellemc.os10.os10_config: 
-       backup: yes 
-       backup_options: 
-         dir_path: /root/backups/Switches/{{hostvars[inventory_hostname].DTG}}
-         filename:  "{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
+   - name: Retrieve current config
+
+     dellemc.os10.os10_command:
+       commands:
+         - show running-configuration
+     register: running_config
+
+   - name: Save config to file
+     copy:
+       content: "{{ running_config.stdout[0] }}"
+       dest: "/root/backups/Switches/{{hostvars[inventory_hostname].DTG}}/{{inventory_hostname}}-{{hostvars[inventory_hostname].DTG}}-config.txt"
 
 - hosts: SFTP_Server
   gather_facts: false
