@@ -1,6 +1,14 @@
 ---
 ## Playbook to get system time and append it to backup files
 
+- name: Ensure required Ansible collections are installed
+  hosts: localhost
+  tasks:
+    - name: Install Ansible collections
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install -r requirements.yml
+      changed_when: false
+
 - hosts: Dell_switches
   gather_facts: no
 
