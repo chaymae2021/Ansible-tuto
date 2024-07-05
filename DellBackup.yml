@@ -3,6 +3,8 @@
 
 - name: Ensure required Ansible collections are installed
   hosts: localhost
+  gather_facts: no
+  
   tasks:
     - name: Install Ansible collections
       ansible.builtin.command:
