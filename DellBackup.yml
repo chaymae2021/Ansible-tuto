@@ -8,7 +8,7 @@
   tasks:
     - name: Install Ansible collections
       ansible.builtin.command:
-        cmd: ansible-galaxy collection install dellemc.os10
+        cmd: ansible-galaxy collection install -r requirements.yml
       changed_when: false
 
 - name: Backup configuration on Dell switches
